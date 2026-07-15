@@ -1,95 +1,130 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>KJs TRD Chart</title>
-    <script src="https://unpkg.com/lightweight-charts@4.0.0/dist/lightweight-charts.standalone.js">
+    <title>Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
     </script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
         body {
             background: #0b0e14;
-            height: 100vh;
+            margin: 0;
+            padding: 20px;
             display: flex;
-            align-items: center;
             justify-content: center;
-            font-family: Arial, sans-serif;
+            align-items: center;
+            height: 100vh;
         }
         #chart-container {
-            width: 95%;
-            height: 90vh;
             background: #0f1620;
             border-radius: 12px;
             padding: 20px;
+            width: 90%;
+            max-width: 1000px;
             border: 1px solid #2a3a4e;
         }
-        #chart {
-            width: 100%;
-            height: 100%;
+        canvas {
+            width: 100% !important;
+            height: 500px !important;
+        }
+        h2 {
+            color: #e8edf5;
+            text-align: center;
+            font-family: Arial, sans-serif;
         }
     </style>
 </head>
 <body>
     <div id="chart-container">
-        <div id="chart"></div>
+        <h2>📊 NIFTY 50 - Candlestick Chart</h2>
+        <canvas id="chartCanvas"></canvas>
     </div>
 
     <script>
-        console.log('🚀 Starting chart...');
+        console.log('🚀 Starting Chart.js...');
 
-        const chartElement = document.getElementById('chart');
-        console.log('📦 Chart element:', chartElement);
-
-        const chart = LightweightCharts.createChart(chartElement, {
-            width: chartElement.clientWidth,
-            height: chartElement.clientHeight,
-            layout: {
-                background: { color: '#0f1620' },
-                textColor: '#8a9bb5',
-            },
-            grid: {
-                vertLines: { color: '#1a2433' },
-                horzLines: { color: '#1a2433' },
-            },
-        });
-
-        console.log('✅ Chart created!');
-
-        const candleSeries = chart.addCandlestickSeries({
-            upColor: '#22c55e',
-            downColor: '#ef4444',
-            borderUpColor: '#22c55e',
-            borderDownColor: '#ef4444',
-            wickUpColor: '#22c55e',
-            wickDownColor: '#ef4444',
-        });
-
-        console.log('✅ Series added!');
-
-        // Generate mock data
+        // Generate candlestick data
         const data = [];
-        let price = 100;
-        for (let i = 0; i < 100; i++) {
-            const change = (Math.random() - 0.48) * 3;
+        let price = 22400;
+        const now = new Date();
+
+        for (let i = 0; i < 60; i++) {
+            const change = (Math.random() - 0.48) * 60;
             const open = price;
             const close = price + change;
-            const high = Math.max(open, close) + Math.random() * 1.5;
-            const low = Math.min(open, close) - Math.random() * 1.5;
+            const high = Math.max(open, close) + Math.random() * 20;
+            const low = Math.min(open, close) - Math.random() * 20;
+
             data.push({
-                time: i + 1,
-                open: Math.round(open * 100) / 100,
-                high: Math.round(high * 100) / 100,
-                low: Math.round(low * 100) / 100,
-                close: Math.round(close * 100) / 100,
+                x: new Date(now.getTime() - (59 - i) * 60000),
+                o: Math.round(open * 100) / 100,
+                h: Math.round(high * 100) / 100,
+                l: Math.round(low * 100) / 100,
+                c: Math.round(close * 100) / 100,
+                isBull: close > open
             });
+
             price = close;
         }
 
-        candleSeries.setData(data);
-        console.log('✅ Data set! Chart should be visible now!');
+        const ctx = document.getElementById('chartCanvas').getContext('2d');
+
+        // Create candlestick chart using bar chart
+        const chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: data.map(d => d.x.toLocaleTimeString()),
+                datasets: [
+                    {
+                        label: 'Bullish',
+                        data: data.map(d => d.isBull ? d.c - d.o : 0),
+                        backgroundColor: '#22c55e',
+                        borderColor: '#22c55e',
+                        borderWidth: 1,
+                        barPercentage: 0.6,
+                    },
+                    {
+                        label: 'Bearish',
+                        data: data.map(d => d.isBull ? 0 : d.o - d.c),
+                        backgroundColor: '#ef4444',
+                        borderColor: '#ef4444',
+                        borderWidth: 1,
+                        barPercentage: 0.6,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#8a9bb5'
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const index = context.dataIndex;
+                                const d = data[index];
+                                return `O: ${d.o} | H: ${d.h} | L: ${d.l} | C: ${d.c}`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: '#1a2433' },
+                        ticks: { color: '#5a6f8a', maxTicksLimit: 20 }
+                    },
+                    y: {
+                        grid: { color: '#1a2433' },
+                        ticks: { color: '#5a6f8a' }
+                    }
+                }
+            }
+        });
+
+        console.log('✅ Chart.js chart created!');
         console.log('📊 Total candles:', data.length);
     </script>
 </body>
