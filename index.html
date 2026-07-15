@@ -1003,55 +1003,285 @@ class MomentumBreakout(Module):
         </div>
     </div>
 
-   <script>
-    // ============================================================
-    // NAVIGATION - FIXED
-    // ============================================================
-    document.addEventListener('DOMContentLoaded', function() {
-        const navItems = document.querySelectorAll('.nav-item');
-        const pages = document.querySelectorAll('.page');
+    <!-- ============================================================ -->
+    <!-- JAVASCRIPT - COMPLETE -->
+    <!-- ============================================================ -->
+    <script>
+        // ============================================================
+        // NAVIGATION
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const navItems = document.querySelectorAll('.nav-item');
+            const pages = document.querySelectorAll('.page');
 
-        console.log('✅ Navigation initialized');
-        console.log('📄 Found pages:', pages.length);
-        console.log('📌 Found nav items:', navItems.length);
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const pageName = this.dataset.page;
+                    navItems.forEach(n => n.classList.remove('active'));
+                    this.classList.add('active');
+                    pages.forEach(p => p.classList.remove('active'));
+                    const targetPage = document.getElementById('page-' + pageName);
+                    if (targetPage) {
+                        targetPage.classList.add('active');
+                        if (pageName === 'chart') {
+                            setTimeout(drawChart, 200);
+                        }
+                    }
+                });
+            });
 
-        navItems.forEach(item => {
-            item.addEventListener('click', function(e) {
-                e.preventDefault();
-
-                const pageName = this.dataset.page;
-                console.log('🔄 Navigating to:', pageName);
-
-                // Remove active from all nav items
-                navItems.forEach(n => n.classList.remove('active'));
-                this.classList.add('active');
-
-                // Hide ALL pages
-                pages.forEach(p => p.classList.remove('active'));
-
-                // Show the target page
+            // Set default
+            const defaultPage = document.querySelector('.nav-item.active');
+            if (defaultPage) {
+                const pageName = defaultPage.dataset.page;
                 const targetPage = document.getElementById('page-' + pageName);
                 if (targetPage) {
+                    pages.forEach(p => p.classList.remove('active'));
                     targetPage.classList.add('active');
-                    console.log('✅ Showing page:', pageName);
-                } else {
-                    console.error('❌ Page not found: page-' + pageName);
                 }
-            });
-        });
-
-        // Set default page
-        const defaultPage = document.querySelector('.nav-item.active');
-        if (defaultPage) {
-            const pageName = defaultPage.dataset.page;
-            const targetPage = document.getElementById('page-' + pageName);
-            if (targetPage) {
-                pages.forEach(p => p.classList.remove('active'));
-                targetPage.classList.add('active');
-                console.log('✅ Default page set to:', pageName);
             }
-        }
-    });
 
-    console.log('✅ KJs TRD Trading Terminal Loaded Successfully');
-</script>
+            // ============================================================
+            // DRAW CHART
+            // ============================================================
+            function drawChart() {
+                const canvas = document.getElementById('chartCanvas');
+                if (!canvas) return;
+
+                const container = canvas.parentElement;
+                canvas.width = container.clientWidth || 800;
+                canvas.height = container.clientHeight || 500;
+
+                const ctx = canvas.getContext('2d');
+                const w = canvas.width;
+                const h = canvas.height;
+
+                ctx.fillStyle = '#0f1620';
+                ctx.fillRect(0, 0, w, h);
+
+                // Generate candles
+                const count = 60;
+                const candles = [];
+                let price = 22400;
+
+                for (let i = 0; i < count; i++) {
+                    const change = (Math.random() - 0.48) * 60;
+                    const open = price;
+                    const close = price + change;
+                    const high = Math.max(open, close) + Math.random() * 20;
+                    const low = Math.min(open, close) - Math.random() * 20;
+                    candles.push({ open, close, high, low });
+                    price = close;
+                }
+
+                let minPrice = Infinity;
+                let maxPrice = -Infinity;
+                candles.forEach(c => {
+                    if (c.high > maxPrice) maxPrice = c.high;
+                    if (c.low < minPrice) minPrice = c.low;
+                });
+                const padding = 40;
+                const candleWidth = (w - padding * 2) / count * 0.7;
+                const gap = (w - padding * 2) / count * 0.3;
+                const range = maxPrice - minPrice || 1;
+
+                // Grid
+                ctx.strokeStyle = '#1a2433';
+                ctx.lineWidth = 0.5;
+                for (let i = 0; i < 5; i++) {
+                    const y = padding + (h - padding * 2) * (i / 4);
+                    ctx.beginPath();
+                    ctx.moveTo(padding, y);
+                    ctx.lineTo(w - padding, y);
+                    ctx.stroke();
+                    const label = (maxPrice - (range * i / 4)).toFixed(0);
+                    ctx.fillStyle = '#5a6f8a';
+                    ctx.font = '10px sans-serif';
+                    ctx.fillText(label, 4, y + 3);
+                }
+
+                // Candles
+                candles.forEach((c, i) => {
+                    const x = padding + i * (candleWidth + gap);
+                    const yHigh = padding + (h - padding * 2) * (1 - (c.high - minPrice) / range);
+                    const yLow = padding + (h - padding * 2) * (1 - (c.low - minPrice) / range);
+                    const yOpen = padding + (h - padding * 2) * (1 - (c.open - minPrice) / range);
+                    const yClose = padding + (h - padding * 2) * (1 - (c.close - minPrice) / range);
+
+                    const isBull = c.close > c.open;
+                    const color = isBull ? '#22c55e' : '#ef4444';
+
+                    ctx.strokeStyle = color;
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.moveTo(x + candleWidth / 2, yHigh);
+                    ctx.lineTo(x + candleWidth / 2, yLow);
+                    ctx.stroke();
+
+                    const bodyTop = Math.min(yOpen, yClose);
+                    const bodyHeight = Math.max(Math.abs(yClose - yOpen), 2);
+                    ctx.fillStyle = color;
+                    ctx.fillRect(x, bodyTop, candleWidth, bodyHeight);
+                });
+
+                // MA line
+                ctx.strokeStyle = '#3b82f6';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                let first = true;
+                for (let i = 19; i < candles.length; i++) {
+                    let sum = 0;
+                    for (let j = i - 19; j <= i; j++) {
+                        sum += candles[j].close;
+                    }
+                    const ma = sum / 20;
+                    const x = padding + i * (candleWidth + gap) + candleWidth / 2;
+                    const y = padding + (h - padding * 2) * (1 - (ma - minPrice) / range);
+                    if (first) {
+                        ctx.moveTo(x, y);
+                        first = false;
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                }
+                ctx.stroke();
+
+                // BUY/SELL markers
+                const markers = [
+                    { index: 12, type: 'BUY', price: candles[12].close },
+                    { index: 28, type: 'SELL', price: candles[28].close },
+                    { index: 45, type: 'BUY', price: candles[45].close },
+                ];
+
+                markers.forEach(m => {
+                    const x = padding + m.index * (candleWidth + gap) + candleWidth / 2;
+                    const y = padding + (h - padding * 2) * (1 - (m.price - minPrice) / range);
+                    const isBuy = m.type === 'BUY';
+                    ctx.fillStyle = isBuy ? '#22c55e' : '#ef4444';
+                    ctx.beginPath();
+                    ctx.moveTo(x, isBuy ? y - 14 : y + 14);
+                    ctx.lineTo(x - 7, isBuy ? y - 4 : y + 4);
+                    ctx.lineTo(x + 7, isBuy ? y - 4 : y + 4);
+                    ctx.closePath();
+                    ctx.fill();
+
+                    ctx.fillStyle = '#e8edf5';
+                    ctx.font = '8px sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(m.type, x, isBuy ? y - 18 : y + 26);
+                });
+            }
+
+            // Draw on load
+            setTimeout(function() {
+                const chartPage = document.getElementById('page-chart');
+                if (chartPage && chartPage.classList.contains('active')) {
+                    drawChart();
+                }
+            }, 300);
+
+            // Resize handler
+            let resizeTimeout;
+            window.addEventListener('resize', function() {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(function() {
+                    const chartPage = document.getElementById('page-chart');
+                    if (chartPage && chartPage.classList.contains('active')) {
+                        drawChart();
+                    }
+                }, 200);
+            });
+
+            // Toast function
+            function showToast(message) {
+                const existing = document.querySelector('.toast');
+                if (existing) existing.remove();
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+                toast.textContent = message;
+                document.body.appendChild(toast);
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transition = 'opacity 0.3s ease';
+                    setTimeout(() => toast.remove(), 300);
+                }, 2500);
+            }
+
+            // Module buttons
+            document.querySelectorAll('.module-actions button').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const action = this.textContent.trim();
+                    const moduleCard = this.closest('.module-card');
+                    if (!moduleCard) return;
+                    const moduleName = moduleCard.querySelector('.module-name')?.textContent?.trim() || 'Module';
+                    const statusDot = moduleCard.querySelector('.status-dot');
+                    const statusText = moduleCard.querySelector('.module-status');
+
+                    if (action === '▶ Run' || action === '▶ Resume') {
+                        if (statusDot && statusText) {
+                            const versionSpan = statusText.querySelector('span:last-child');
+                            const version = versionSpan ? versionSpan.textContent : 'v1.0.0';
+                            statusText.innerHTML =
+                                `<span class="status-dot running"></span> Running <span style="color:var(--text-muted);margin-left:8px;">${version}</span>`;
+                        }
+                    } else if (action === '⏹ Stop') {
+                        if (statusDot && statusText) {
+                            const versionSpan = statusText.querySelector('span:last-child');
+                            const version = versionSpan ? versionSpan.textContent : 'v1.0.0';
+                            statusText.innerHTML =
+                                `<span class="status-dot stopped"></span> Stopped <span style="color:var(--text-muted);margin-left:8px;">${version}</span>`;
+                        }
+                    } else if (action === '⏸ Pause') {
+                        if (statusDot && statusText) {
+                            const versionSpan = statusText.querySelector('span:last-child');
+                            const version = versionSpan ? versionSpan.textContent : 'v1.0.0';
+                            statusText.innerHTML =
+                                `<span class="status-dot paused"></span> Paused <span style="color:var(--text-muted);margin-left:8px;">${version}</span>`;
+                        }
+                    }
+                    showToast(`${moduleName}: ${action} clicked`);
+                });
+            });
+
+            // Timeframe buttons
+            document.querySelectorAll('.timeframe-selector button').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.timeframe-selector button').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    showToast(`Timeframe changed to ${this.textContent}`);
+                });
+            });
+
+            // Chart toolbar buttons
+            document.querySelectorAll('.chart-toolbar button').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const group = this.closest('.toolbar-group');
+                    if (group) {
+                        const siblings = group.querySelectorAll('button');
+                        if (siblings.length > 1) {
+                            siblings.forEach(b => b.classList.remove('active'));
+                            this.classList.add('active');
+                        }
+                    }
+                    showToast(`Chart: ${this.textContent} selected`);
+                });
+            });
+
+            // Placeholder buttons
+            document.querySelectorAll('.placeholder-page .btn-primary, .placeholder-page .btn-success').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const parent = this.closest('.placeholder-content');
+                    const title = parent?.querySelector('h3')?.textContent || 'Page';
+                    showToast(`${title}: ${this.textContent} clicked`);
+                });
+            });
+
+            console.log('✅ KJs TRD Trading Terminal Loaded Successfully');
+            console.log('📊 Chart page ready - click Chart in sidebar');
+        });
+    </script>
+
+</body>
+</html>
