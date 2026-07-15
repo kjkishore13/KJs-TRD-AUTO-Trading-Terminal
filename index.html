@@ -7,20 +7,12 @@
     <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-
     <div id="app">
-
         <!-- TOP BAR -->
         <header id="topbar">
-            <div class="logo">
-                📈 KJs <span>TRD</span>
-                <small>| Trading OS</small>
-            </div>
+            <div class="logo">📈 KJs <span>TRD</span> <small>| Trading OS</small></div>
             <div class="topbar-actions">
-                <div class="status">
-                    <span class="dot"></span>
-                    Live
-                </div>
+                <div class="status"><span class="dot"></span> Live</div>
                 <span class="broker-status">🔗 Dhan Connected</span>
                 <input class="symbol-input" type="text" value="NIFTY 50" />
                 <div class="timeframe-selector">
@@ -32,126 +24,48 @@
                 </div>
             </div>
         </header>
-
-        <!-- MAIN -->
         <div id="main">
-
-            <!-- LEFT SIDEBAR -->
+            <!-- SIDEBAR -->
             <nav id="sidebar">
                 <div class="nav-section">Navigation</div>
-                <div class="nav-item active" data-page="dashboard">
-                    <span class="icon">📊</span>
-                    <span>Dashboard</span>
-                </div>
-                <div class="nav-item" data-page="chart">
-                    <span class="icon">📈</span>
-                    <span>Chart</span>
-                </div>
-                <div class="nav-item" data-page="python">
-                    <span class="icon">🐍</span>
-                    <span>Python Studio</span>
-                </div>
-                <div class="nav-item" data-page="modules">
-                    <span class="icon">📦</span>
-                    <span>Module Library</span>
-                </div>
+                <div class="nav-item active" data-page="dashboard"><span class="icon">📊</span><span>Dashboard</span></div>
+                <div class="nav-item" data-page="chart"><span class="icon">📈</span><span>Chart</span></div>
+                <div class="nav-item" data-page="python"><span class="icon">🐍</span><span>Python Studio</span></div>
+                <div class="nav-item" data-page="modules"><span class="icon">📦</span><span>Module Library</span></div>
                 <div class="nav-divider"></div>
                 <div class="nav-section">Tools</div>
-                <div class="nav-item" data-page="watchlist">
-                    <span class="icon">👁️</span>
-                    <span>Watchlists</span>
-                </div>
-                <div class="nav-item" data-page="screener">
-                    <span class="icon">🔍</span>
-                    <span>Screener</span>
-                </div>
-                <div class="nav-item" data-page="backtest">
-                    <span class="icon">⏪</span>
-                    <span>Backtesting</span>
-                </div>
-                <div class="nav-item" data-page="paper">
-                    <span class="icon">📄</span>
-                    <span>Paper Trading</span>
-                </div>
+                <div class="nav-item" data-page="watchlist"><span class="icon">👁️</span><span>Watchlists</span></div>
+                <div class="nav-item" data-page="screener"><span class="icon">🔍</span><span>Screener</span></div>
+                <div class="nav-item" data-page="backtest"><span class="icon">⏪</span><span>Backtesting</span></div>
+                <div class="nav-item" data-page="paper"><span class="icon">📄</span><span>Paper Trading</span></div>
                 <div class="nav-divider"></div>
                 <div class="nav-section">System</div>
-                <div class="nav-item" data-page="automation">
-                    <span class="icon">🤖</span>
-                    <span>Automation</span>
-                </div>
-                <div class="nav-item" data-page="orders">
-                    <span class="icon">🛒</span>
-                    <span>Orders</span>
-                </div>
-                <div class="nav-item" data-page="portfolio">
-                    <span class="icon">💼</span>
-                    <span>Portfolio</span>
-                </div>
-                <div class="nav-item" data-page="notifications">
-                    <span class="icon">🔔</span>
-                    <span>Notifications</span>
-                </div>
+                <div class="nav-item" data-page="automation"><span class="icon">🤖</span><span>Automation</span></div>
+                <div class="nav-item" data-page="orders"><span class="icon">🛒</span><span>Orders</span></div>
+                <div class="nav-item" data-page="portfolio"><span class="icon">💼</span><span>Portfolio</span></div>
+                <div class="nav-item" data-page="notifications"><span class="icon">🔔</span><span>Notifications</span></div>
                 <div class="nav-divider"></div>
-                <div class="nav-item" data-page="settings">
-                    <span class="icon">⚙️</span>
-                    <span>Settings</span>
-                </div>
-                <div class="nav-item" data-page="logs">
-                    <span class="icon">📋</span>
-                    <span>Logs</span>
-                </div>
-                <div class="nav-item" data-page="reports">
-                    <span class="icon">📄</span>
-                    <span>Reports</span>
-                </div>
+                <div class="nav-item" data-page="settings"><span class="icon">⚙️</span><span>Settings</span></div>
+                <div class="nav-item" data-page="logs"><span class="icon">📋</span><span>Logs</span></div>
+                <div class="nav-item" data-page="reports"><span class="icon">📄</span><span>Reports</span></div>
             </nav>
-
-            <!-- CONTENT AREA -->
             <div id="content">
-
-                <!-- PAGE: DASHBOARD -->
+                <!-- DASHBOARD -->
                 <div id="page-dashboard" class="page active">
                     <div class="dashboard-grid">
-                        <div class="stat-card">
-                            <div class="label">Running Modules</div>
-                            <div class="value blue">4</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="label">Today's P&L</div>
-                            <div class="value green">+₹12,450</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="label">Open Positions</div>
-                            <div class="value yellow">3</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="label">Notifications Today</div>
-                            <div class="value blue">18</div>
-                        </div>
+                        <div class="stat-card"><div class="label">Running Modules</div><div class="value blue">4</div></div>
+                        <div class="stat-card"><div class="label">Today's P&L</div><div class="value green">+₹12,450</div></div>
+                        <div class="stat-card"><div class="label">Open Positions</div><div class="value yellow">3</div></div>
+                        <div class="stat-card"><div class="label">Notifications Today</div><div class="value blue">18</div></div>
                     </div>
                     <div class="dashboard-bottom">
                         <div class="panel-card">
                             <div class="panel-title">📊 Recent Activity</div>
-                            <div class="log-entry">
-                                <span class="time">09:45</span>
-                                <span class="msg-green">BUY Signal</span> — NIFTY 50 @ 22,450
-                            </div>
-                            <div class="log-entry">
-                                <span class="time">09:30</span>
-                                <span class="msg-yellow">Strategy Started</span> — MomentumBreakout
-                            </div>
-                            <div class="log-entry">
-                                <span class="time">09:15</span>
-                                <span class="msg-blue">Paper Trade Opened</span> — BANKNIFTY @ 48,200
-                            </div>
-                            <div class="log-entry">
-                                <span class="time">09:00</span>
-                                <span class="msg-green">Market Open</span> — All systems ready
-                            </div>
-                            <div class="log-entry">
-                                <span class="time">08:45</span>
-                                <span class="msg-red">SELL Signal</span> — RELIANCE @ 2,850
-                            </div>
+                            <div class="log-entry"><span class="time">09:45</span><span class="msg-green">BUY Signal</span> — NIFTY 50 @ 22,450</div>
+                            <div class="log-entry"><span class="time">09:30</span><span class="msg-yellow">Strategy Started</span> — MomentumBreakout</div>
+                            <div class="log-entry"><span class="time">09:15</span><span class="msg-blue">Paper Trade Opened</span> — BANKNIFTY @ 48,200</div>
+                            <div class="log-entry"><span class="time">09:00</span><span class="msg-green">Market Open</span> — All systems ready</div>
+                            <div class="log-entry"><span class="time">08:45</span><span class="msg-red">SELL Signal</span> — RELIANCE @ 2,850</div>
                         </div>
                         <div class="panel-card">
                             <div class="panel-title">⚡ System Status <span class="badge">All Good</span></div>
@@ -160,47 +74,26 @@
                             <div class="log-entry"><span class="msg-green">●</span> Broker: Dhan (Live)</div>
                             <div class="log-entry"><span class="msg-green">●</span> Notification: Telegram</div>
                             <div class="log-entry"><span class="msg-green">●</span> Database: Connected</div>
-                            <div class="log-entry" style="margin-top:8px;color:var(--text-muted);font-size:11px;">
-                                Uptime: 2h 14m · Memory: 342MB
-                            </div>
+                            <div class="log-entry" style="margin-top:8px;color:var(--text-muted);font-size:11px;">Uptime: 2h 14m · Memory: 342MB</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- PAGE: CHART - WITH INTERACTIVE CHART -->
-<div id="page-chart" class="page" style="padding:0; flex-direction:column;">
-
-    <!-- Chart Toolbar -->
-    <div class="chart-toolbar" style="flex-shrink:0; border-bottom: 1px solid var(--border-color); background: var(--bg-secondary);">
-        <div class="toolbar-group">
-            <button class="active" onclick="window.open('chart.html','_blank')">📈 Open Full Chart</button>
-        </div>
-        <div class="toolbar-group" style="border-right:none;">
-            <span class="indicator-badge">📊 VWAP</span>
-            <span class="indicator-badge">📈 EMA 20</span>
-            <span class="indicator-badge">📉 RSI</span>
-        </div>
-    </div>
-
-    <!-- Chart Container with iframe -->
-    <div style="flex:1; background:#0f1620; position:relative; overflow:hidden; min-height:500px;">
-        <iframe
-            src="chart.html"
-            style="width:100%; height:100%; border:none; background:#0f1620; display:block; position:absolute; top:0; left:0;">
-        </iframe>
-    </div>
-</div>
-
-                    <!-- Chart Container with iframe -->
-                    <div style="flex:1; background:#0f1620; position:relative; overflow:hidden; min-height:500px;">
-                        <iframe
-                            src="chart.html"
-                            style="width:100%; height:100%; border:none; background:#0f1620; display:block; position:absolute; top:0; left:0;">
-                        </iframe>
+                <!-- ===== CHART PAGE - FIXED ===== -->
+                <div id="page-chart" class="page" style="padding:0; flex-direction:column; background:#0f1620;">
+                    <div style="display:flex; align-items:center; gap:12px; padding:8px 16px; background:#131a24; border-bottom:1px solid #2a3a4e; flex-shrink:0; flex-wrap:wrap;">
+                        <button onclick="window.open('chart.html','_blank')" style="background:#3b82f6; color:#fff; border:none; padding:6px 18px; border-radius:4px; font-weight:600; cursor:pointer; font-size:13px;">📈 Open Full Chart</button>
+                        <span style="color:#5a6f8a; font-size:12px;">|</span>
+                        <span class="indicator-badge" style="background:rgba(139,92,246,0.15); color:#8b5cf6; padding:2px 12px; border-radius:20px; font-size:11px; border:1px solid rgba(139,92,246,0.2);">📊 VWAP</span>
+                        <span class="indicator-badge" style="background:rgba(139,92,246,0.15); color:#8b5cf6; padding:2px 12px; border-radius:20px; font-size:11px; border:1px solid rgba(139,92,246,0.2);">📈 EMA 20</span>
+                        <span class="indicator-badge" style="background:rgba(139,92,246,0.15); color:#8b5cf6; padding:2px 12px; border-radius:20px; font-size:11px; border:1px solid rgba(139,92,246,0.2);">📉 RSI</span>
+                    </div>
+                    <div style="flex:1; position:relative; overflow:hidden; min-height:500px; width:100%; background:#0f1620;">
+                        <iframe src="chart.html" style="position:absolute; top:0; left:0; width:100%; height:100%; border:none; background:#0f1620; display:block;"></iframe>
                     </div>
                 </div>
 
-                <!-- PAGE: PYTHON STUDIO -->
+                <!-- PYTHON STUDIO -->
                 <div id="page-python" class="page">
                     <div class="studio-editor">
                         <div class="editor-header">
@@ -269,7 +162,7 @@ class MomentumBreakout(Module):
                     </div>
                 </div>
 
-                <!-- PAGE: MODULE LIBRARY -->
+                <!-- MODULE LIBRARY -->
                 <div id="page-modules" class="page">
                     <div style="display:flex;justify-content:space-between;align-items:center;flex-shrink:0;">
                         <h2 style="font-size:18px;font-weight:600;">📦 Module Library</h2>
@@ -280,10 +173,7 @@ class MomentumBreakout(Module):
                             <div class="module-name">Momentum Breakout</div>
                             <div class="module-type">Strategy</div>
                             <div class="module-desc">Buys on breakout above 20H with volume confirmation</div>
-                            <div class="module-status">
-                                <span class="status-dot running"></span> Running
-                                <span style="color:var(--text-muted);margin-left:8px;">v1.0.0</span>
-                            </div>
+                            <div class="module-status"><span class="status-dot running"></span> Running <span style="color:var(--text-muted);margin-left:8px;">v1.0.0</span></div>
                             <div class="module-actions">
                                 <button class="run">▶ Run</button>
                                 <button class="stop">⏹ Stop</button>
@@ -296,10 +186,7 @@ class MomentumBreakout(Module):
                             <div class="module-name">Previous Day Breakout</div>
                             <div class="module-type">Strategy</div>
                             <div class="module-desc">Trades breakouts above yesterday's high</div>
-                            <div class="module-status">
-                                <span class="status-dot running"></span> Running
-                                <span style="color:var(--text-muted);margin-left:8px;">v2.1.0</span>
-                            </div>
+                            <div class="module-status"><span class="status-dot running"></span> Running <span style="color:var(--text-muted);margin-left:8px;">v2.1.0</span></div>
                             <div class="module-actions">
                                 <button class="run">▶ Run</button>
                                 <button class="stop">⏹ Stop</button>
@@ -312,10 +199,7 @@ class MomentumBreakout(Module):
                             <div class="module-name">EMA Ribbon</div>
                             <div class="module-type">Indicator</div>
                             <div class="module-desc">Multiple EMA lines for trend confirmation</div>
-                            <div class="module-status">
-                                <span class="status-dot running"></span> Running
-                                <span style="color:var(--text-muted);margin-left:8px;">v1.2.0</span>
-                            </div>
+                            <div class="module-status"><span class="status-dot running"></span> Running <span style="color:var(--text-muted);margin-left:8px;">v1.2.0</span></div>
                             <div class="module-actions">
                                 <button class="run">▶ Run</button>
                                 <button class="stop">⏹ Stop</button>
@@ -326,10 +210,7 @@ class MomentumBreakout(Module):
                             <div class="module-name">Momentum Scanner</div>
                             <div class="module-type">Screener</div>
                             <div class="module-desc">Scans for momentum stocks across watchlist</div>
-                            <div class="module-status">
-                                <span class="status-dot stopped"></span> Stopped
-                                <span style="color:var(--text-muted);margin-left:8px;">v1.0.0</span>
-                            </div>
+                            <div class="module-status"><span class="status-dot stopped"></span> Stopped <span style="color:var(--text-muted);margin-left:8px;">v1.0.0</span></div>
                             <div class="module-actions">
                                 <button class="run">▶ Run</button>
                                 <button>📋 Edit</button>
@@ -340,10 +221,7 @@ class MomentumBreakout(Module):
                             <div class="module-name">VWAP Alert</div>
                             <div class="module-type">Alert</div>
                             <div class="module-desc">Alerts when price crosses VWAP</div>
-                            <div class="module-status">
-                                <span class="status-dot paused"></span> Paused
-                                <span style="color:var(--text-muted);margin-left:8px;">v1.0.0</span>
-                            </div>
+                            <div class="module-status"><span class="status-dot paused"></span> Paused <span style="color:var(--text-muted);margin-left:8px;">v1.0.0</span></div>
                             <div class="module-actions">
                                 <button class="run">▶ Run</button>
                                 <button>▶️ Resume</button>
@@ -354,10 +232,7 @@ class MomentumBreakout(Module):
                             <div class="module-name">Institution Detector</div>
                             <div class="module-type">Strategy</div>
                             <div class="module-desc">Detects institutional buying patterns</div>
-                            <div class="module-status">
-                                <span class="status-dot stopped"></span> Stopped
-                                <span style="color:var(--text-muted);margin-left:8px;">v0.9.0</span>
-                            </div>
+                            <div class="module-status"><span class="status-dot stopped"></span> Stopped <span style="color:var(--text-muted);margin-left:8px;">v0.9.0</span></div>
                             <div class="module-actions">
                                 <button class="run">▶ Run</button>
                                 <button>📋 Edit</button>
@@ -368,105 +243,21 @@ class MomentumBreakout(Module):
                 </div>
 
                 <!-- PLACEHOLDER PAGES -->
-                <div id="page-watchlist" class="page placeholder-page">
-                    <div class="placeholder-content">
-                        <div class="icon">👁️</div>
-                        <h3>Watchlists</h3>
-                        <p>Manage your watchlists. Add symbols, create groups, and monitor your favorite stocks.</p>
-                        <button class="btn-primary" style="margin-top:12px;padding:8px 24px;">+ Create Watchlist</button>
-                    </div>
-                </div>
+                <div id="page-watchlist" class="page placeholder-page"><div class="placeholder-content"><div class="icon">👁️</div><h3>Watchlists</h3><p>Manage your watchlists. Add symbols, create groups, and monitor your favorite stocks.</p><button class="btn-primary" style="margin-top:12px;padding:8px 24px;">+ Create Watchlist</button></div></div>
+                <div id="page-screener" class="page placeholder-page"><div class="placeholder-content"><div class="icon">🔍</div><h3>Screener</h3><p>Build dynamic stock lists using Python screeners. Find momentum, breakouts, and more.</p><button class="btn-primary" style="margin-top:12px;padding:8px 24px;">+ New Screener</button></div></div>
+                <div id="page-backtest" class="page placeholder-page"><div class="placeholder-content"><div class="icon">⏪</div><h3>Backtesting</h3><p>Test your strategies on historical data. View performance metrics and equity curves.</p><button class="btn-primary" style="margin-top:12px;padding:8px 24px;">+ New Backtest</button></div></div>
+                <div id="page-paper" class="page placeholder-page"><div class="placeholder-content"><div class="icon">📄</div><h3>Paper Trading</h3><p>Trade without real money. Test your strategies in a risk-free environment.</p><button class="btn-success" style="margin-top:12px;padding:8px 24px;">▶ Start Paper Trading</button></div></div>
+                <div id="page-automation" class="page placeholder-page"><div class="placeholder-content"><div class="icon">🤖</div><h3>Automation</h3><p>Configure automated trading rules. Set risk limits, position sizing, and execution rules.</p><button class="btn-primary" style="margin-top:12px;padding:8px 24px;">+ New Automation Rule</button></div></div>
+                <div id="page-orders" class="page placeholder-page"><div class="placeholder-content"><div class="icon">🛒</div><h3>Orders</h3><p>View all your orders — pending, executed, and cancelled.</p></div></div>
+                <div id="page-portfolio" class="page placeholder-page"><div class="placeholder-content"><div class="icon">💼</div><h3>Portfolio</h3><p>Track your holdings, P&L, and portfolio performance.</p></div></div>
+                <div id="page-notifications" class="page placeholder-page"><div class="placeholder-content"><div class="icon">🔔</div><h3>Notifications</h3><p>View all notifications from Telegram, WhatsApp, Email, and more.</p></div></div>
+                <div id="page-settings" class="page placeholder-page"><div class="placeholder-content"><div class="icon">⚙️</div><h3>Settings</h3><p>Configure your platform preferences, broker accounts, and API keys.</p></div></div>
+                <div id="page-logs" class="page placeholder-page"><div class="placeholder-content"><div class="icon">📋</div><h3>Logs</h3><p>View system logs, module logs, and error traces.</p></div></div>
+                <div id="page-reports" class="page placeholder-page"><div class="placeholder-content"><div class="icon">📄</div><h3>Reports</h3><p>Generate daily, weekly, and monthly performance reports.</p></div></div>
+            </div>
+        </div>
+    </div>
 
-                <div id="page-screener" class="page placeholder-page">
-                    <div class="placeholder-content">
-                        <div class="icon">🔍</div>
-                        <h3>Screener</h3>
-                        <p>Build dynamic stock lists using Python screeners. Find momentum, breakouts, and more.</p>
-                        <button class="btn-primary" style="margin-top:12px;padding:8px 24px;">+ New Screener</button>
-                    </div>
-                </div>
-
-                <div id="page-backtest" class="page placeholder-page">
-                    <div class="placeholder-content">
-                        <div class="icon">⏪</div>
-                        <h3>Backtesting</h3>
-                        <p>Test your strategies on historical data. View performance metrics and equity curves.</p>
-                        <button class="btn-primary" style="margin-top:12px;padding:8px 24px;">+ New Backtest</button>
-                    </div>
-                </div>
-
-                <div id="page-paper" class="page placeholder-page">
-                    <div class="placeholder-content">
-                        <div class="icon">📄</div>
-                        <h3>Paper Trading</h3>
-                        <p>Trade without real money. Test your strategies in a risk-free environment.</p>
-                        <button class="btn-success" style="margin-top:12px;padding:8px 24px;">▶ Start Paper Trading</button>
-                    </div>
-                </div>
-
-                <div id="page-automation" class="page placeholder-page">
-                    <div class="placeholder-content">
-                        <div class="icon">🤖</div>
-                        <h3>Automation</h3>
-                        <p>Configure automated trading rules. Set risk limits, position sizing, and execution rules.</p>
-                        <button class="btn-primary" style="margin-top:12px;padding:8px 24px;">+ New Automation Rule</button>
-                    </div>
-                </div>
-
-                <div id="page-orders" class="page placeholder-page">
-                    <div class="placeholder-content">
-                        <div class="icon">🛒</div>
-                        <h3>Orders</h3>
-                        <p>View all your orders — pending, executed, and cancelled.</p>
-                    </div>
-                </div>
-
-                <div id="page-portfolio" class="page placeholder-page">
-                    <div class="placeholder-content">
-                        <div class="icon">💼</div>
-                        <h3>Portfolio</h3>
-                        <p>Track your holdings, P&L, and portfolio performance.</p>
-                    </div>
-                </div>
-
-                <div id="page-notifications" class="page placeholder-page">
-                    <div class="placeholder-content">
-                        <div class="icon">🔔</div>
-                        <h3>Notifications</h3>
-                        <p>View all notifications from Telegram, WhatsApp, Email, and more.</p>
-                    </div>
-                </div>
-
-                <div id="page-settings" class="page placeholder-page">
-                    <div class="placeholder-content">
-                        <div class="icon">⚙️</div>
-                        <h3>Settings</h3>
-                        <p>Configure your platform preferences, broker accounts, and API keys.</p>
-                    </div>
-                </div>
-
-                <div id="page-logs" class="page placeholder-page">
-                    <div class="placeholder-content">
-                        <div class="icon">📋</div>
-                        <h3>Logs</h3>
-                        <p>View system logs, module logs, and error traces.</p>
-                    </div>
-                </div>
-
-                <div id="page-reports" class="page placeholder-page">
-                    <div class="placeholder-content">
-                        <div class="icon">📄</div>
-                        <h3>Reports</h3>
-                        <p>Generate daily, weekly, and monthly performance reports.</p>
-                    </div>
-                </div>
-
-            </div><!-- /content -->
-        </div><!-- /main -->
-    </div><!-- /app -->
-
-    <!-- JAVASCRIPT -->
     <script src="script.js"></script>
-
 </body>
 </html>
