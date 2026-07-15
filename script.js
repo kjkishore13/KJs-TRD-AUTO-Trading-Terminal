@@ -1,52 +1,82 @@
 // ============================================================
-// KJs TRD TRADING TERMINAL - JAVASCRIPT
+// KJs TRD Trading Terminal - Navigation & Interactions
 // ============================================================
 
 // ------------------------------------------------
-// 1. NAVIGATION
+// 1. PAGE NAVIGATION
 // ------------------------------------------------
-const navItems = document.querySelectorAll('.nav-item');
-const pages = document.querySelectorAll('.page');
+document.addEventListener('DOMContentLoaded', function() {
+    const navItems = document.querySelectorAll('.nav-item');
+    const pages = document.querySelectorAll('.page');
 
-navItems.forEach(item => {
-    item.addEventListener('click', function() {
-        // Remove active from all nav items
-        navItems.forEach(n => n.classList.remove('active'));
-        this.classList.add('active');
+    console.log('✅ Navigation initialized');
+    console.log('📄 Found pages:', pages.length);
+    console.log('📌 Found nav items:', navItems.length);
 
-        // Hide all pages
-        pages.forEach(p => p.classList.remove('active'));
+    navItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
 
-        // Show the target page
-        const pageId = this.dataset.page;
-        const targetPage = document.getElementById('page-' + pageId);
-        if (targetPage) {
-            targetPage.classList.add('active');
-        }
+            // Get the page name from data-page attribute
+            const pageName = this.dataset.page;
+            console.log('🔄 Navigating to:', pageName);
 
-        // If chart page, redraw chart after a tiny delay
-        if (pageId === 'chart') {
-            setTimeout(drawChart, 100);
-        }
+            // Remove active class from all nav items
+            navItems.forEach(n => n.classList.remove('active'));
+
+            // Add active class to clicked item
+            this.classList.add('active');
+
+            // Hide ALL pages
+            pages.forEach(p => p.classList.remove('active'));
+
+            // Show the target page
+            const targetPage = document.getElementById('page-' + pageName);
+            if (targetPage) {
+                targetPage.classList.add('active');
+                console.log('✅ Showing page:', pageName);
+
+                // If chart page, reload iframe
+                if (pageName === 'chart') {
+                    const iframe = targetPage.querySelector('iframe');
+                    if (iframe) {
+                        iframe.src = iframe.src;
+                    }
+                }
+            } else {
+                console.error('❌ Page not found: page-' + pageName);
+            }
+        });
     });
+
+    // Set default active page
+    const defaultPage = document.querySelector('.nav-item.active');
+    if (defaultPage) {
+        const pageName = defaultPage.dataset.page;
+        const targetPage = document.getElementById('page-' + pageName);
+        if (targetPage) {
+            pages.forEach(p => p.classList.remove('active'));
+            targetPage.classList.add('active');
+            console.log('✅ Default page set to:', pageName);
+        }
+    }
 });
 
 // ------------------------------------------------
-// 2. CHART (Simple Candlestick Drawing)
+// 2. CHART DRAWING (for dashboard preview)
 // ------------------------------------------------
 function drawChart() {
     const canvas = document.getElementById('chartCanvas');
     if (!canvas) return;
 
     const rect = canvas.parentElement.getBoundingClientRect();
-    canvas.width = canvas.parentElement.clientWidth;
-    canvas.height = canvas.parentElement.clientHeight;
+    canvas.width = canvas.parentElement.clientWidth || 800;
+    canvas.height = canvas.parentElement.clientHeight || 400;
 
     const ctx = canvas.getContext('2d');
     const w = canvas.width;
     const h = canvas.height;
 
-    // Clear
     ctx.fillStyle = '#0f1620';
     ctx.fillRect(0, 0, w, h);
 
@@ -65,7 +95,6 @@ function drawChart() {
         price = close;
     }
 
-    // Find min/max for scaling
     let minPrice = Infinity;
     let maxPrice = -Infinity;
     candles.forEach(c => {
@@ -77,7 +106,7 @@ function drawChart() {
     const gap = (w - padding * 2) / candleCount * 0.3;
     const range = maxPrice - minPrice || 1;
 
-    // Draw grid
+    // Grid
     ctx.strokeStyle = '#1a2433';
     ctx.lineWidth = 0.5;
     for (let i = 0; i < 5; i++) {
@@ -86,14 +115,13 @@ function drawChart() {
         ctx.moveTo(padding, y);
         ctx.lineTo(w - padding, y);
         ctx.stroke();
-
         const priceLabel = maxPrice - (range * i / 4);
         ctx.fillStyle = '#5a6f8a';
         ctx.font = '10px Inter, sans-serif';
         ctx.fillText(priceLabel.toFixed(2), 4, y + 3);
     }
 
-    // Draw candles
+    // Candles
     candles.forEach((c, i) => {
         const x = padding + i * (candleWidth + gap);
         const yHigh = padding + (h - padding * 2) * (1 - (c.high - minPrice) / range);
@@ -104,7 +132,6 @@ function drawChart() {
         const isBull = c.close > c.open;
         const color = isBull ? '#22c55e' : '#ef4444';
 
-        // Wick
         ctx.strokeStyle = color;
         ctx.lineWidth = 1;
         ctx.beginPath();
@@ -112,14 +139,13 @@ function drawChart() {
         ctx.lineTo(x + candleWidth / 2, yLow);
         ctx.stroke();
 
-        // Body
         const bodyTop = Math.min(yOpen, yClose);
         const bodyHeight = Math.max(Math.abs(yClose - yOpen), 1);
         ctx.fillStyle = color;
         ctx.fillRect(x, bodyTop, candleWidth, bodyHeight);
     });
 
-    // Draw MA line (simple)
+    // MA line
     ctx.strokeStyle = '#3b82f6';
     ctx.lineWidth = 1.5;
     ctx.beginPath();
@@ -135,31 +161,6 @@ function drawChart() {
         else ctx.lineTo(x, y);
     }
     ctx.stroke();
-
-    // Buy/Sell markers
-    const markers = [
-        { index: 12, type: 'BUY', price: candles[12].close },
-        { index: 28, type: 'SELL', price: candles[28].close },
-        { index: 45, type: 'BUY', price: candles[45].close },
-    ];
-
-    markers.forEach(m => {
-        const x = padding + m.index * (candleWidth + gap) + candleWidth / 2;
-        const y = padding + (h - padding * 2) * (1 - (m.price - minPrice) / range);
-        const isBuy = m.type === 'BUY';
-        ctx.fillStyle = isBuy ? '#22c55e' : '#ef4444';
-        ctx.beginPath();
-        ctx.moveTo(x, isBuy ? y - 16 : y + 16);
-        ctx.lineTo(x - 8, isBuy ? y - 6 : y + 6);
-        ctx.lineTo(x + 8, isBuy ? y - 6 : y + 6);
-        ctx.closePath();
-        ctx.fill();
-
-        ctx.fillStyle = '#e8edf5';
-        ctx.font = '9px Inter, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText(m.type, x, isBuy ? y - 20 : y + 28);
-    });
 }
 
 // ------------------------------------------------
@@ -172,8 +173,22 @@ function showToast(message) {
     const toast = document.createElement('div');
     toast.className = 'toast';
     toast.textContent = message;
+    toast.style.cssText = `
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: #0f1620;
+        border: 1px solid #2a3a4e;
+        color: #e8edf5;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 13px;
+        z-index: 9999;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.6);
+        animation: slideUp 0.3s ease;
+        max-width: 350px;
+    `;
 
-    // Add animation keyframes if not exists
     if (!document.querySelector('#toastStyles')) {
         const style = document.createElement('style');
         style.id = 'toastStyles';
@@ -190,7 +205,6 @@ function showToast(message) {
     }
 
     document.body.appendChild(toast);
-
     setTimeout(() => {
         toast.style.opacity = '0';
         toast.style.transition = 'opacity 0.3s ease';
@@ -199,60 +213,7 @@ function showToast(message) {
 }
 
 // ------------------------------------------------
-// 4. INITIAL LOAD
-// ------------------------------------------------
-window.addEventListener('load', function() {
-    setTimeout(drawChart, 300);
-});
-
-// Redraw chart on window resize
-let resizeTimeout;
-window.addEventListener('resize', function() {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(() => {
-        const chartPage = document.getElementById('page-chart');
-        if (chartPage && chartPage.classList.contains('active')) {
-            drawChart();
-        }
-    }, 200);
-});
-
-// ------------------------------------------------
-// 5. PYTHON STUDIO: Console Log Simulation
-// ------------------------------------------------
-setInterval(() => {
-    const consoleOutput = document.getElementById('consoleOutput');
-    if (!consoleOutput) return;
-
-    const pagePython = document.getElementById('page-python');
-    if (!pagePython || !pagePython.classList.contains('active')) return;
-
-    const messages = [
-        { text: '[10:01:15] New candle received', cls: 'info' },
-        { text: '[10:01:16] Checking breakout condition', cls: 'info' },
-        { text: '[10:01:16] Period high: 22,480.50', cls: 'info' },
-        { text: '[10:01:17] BUY signal generated!', cls: 'success' },
-        { text: '[10:01:17] 📨 BUY_SIGNAL event published', cls: 'info' },
-        { text: '[10:01:18] 📄 Paper Trade: Order placed', cls: 'info' },
-        { text: '[10:01:18] 🔔 Notification sent via Telegram', cls: 'info' },
-        { text: '[10:01:20] ⚠️ Stop loss: 22,350', cls: 'warn' },
-    ];
-
-    const msg = messages[Math.floor(Math.random() * messages.length)];
-    const entry = document.createElement('div');
-    entry.innerHTML = `<span class="${msg.cls}">${msg.text}</span>`;
-    consoleOutput.appendChild(entry);
-
-    // Keep only last 30 entries
-    while (consoleOutput.children.length > 30) {
-        consoleOutput.removeChild(consoleOutput.firstChild);
-    }
-
-    consoleOutput.scrollTop = consoleOutput.scrollHeight;
-}, 5000);
-
-// ------------------------------------------------
-// 6. MODULE LIBRARY: Button Interactions
+// 4. MODULE BUTTON INTERACTIONS
 // ------------------------------------------------
 document.querySelectorAll('.module-actions button').forEach(btn => {
     btn.addEventListener('click', function(e) {
@@ -260,21 +221,17 @@ document.querySelectorAll('.module-actions button').forEach(btn => {
         const action = this.textContent.trim();
         const moduleCard = this.closest('.module-card');
         if (!moduleCard) return;
-        
-        const moduleName = moduleCard.querySelector('.module-name')
-            ?.textContent?.trim() || 'Module';
 
+        const moduleName = moduleCard.querySelector('.module-name')?.textContent?.trim() || 'Module';
         const statusDot = moduleCard.querySelector('.status-dot');
         const statusText = moduleCard.querySelector('.module-status');
 
         if (action === '▶ Run' || action === '▶ Resume') {
-            if (statusDot) {
-                const versionSpan = statusText?.querySelector('span:last-child');
+            if (statusDot && statusText) {
+                const versionSpan = statusText.querySelector('span:last-child');
                 const version = versionSpan ? versionSpan.textContent : 'v1.0.0';
-                if (statusText) {
-                    statusText.innerHTML =
-                        `<span class="status-dot running"></span> Running <span style="color:var(--text-muted);margin-left:8px;">${version}</span>`;
-                }
+                statusText.innerHTML =
+                    `<span class="status-dot running"></span> Running <span style="color:var(--text-muted);margin-left:8px;">${version}</span>`;
             }
         } else if (action === '⏹ Stop') {
             if (statusDot && statusText) {
@@ -297,19 +254,18 @@ document.querySelectorAll('.module-actions button').forEach(btn => {
 });
 
 // ------------------------------------------------
-// 7. TIMEFRAME BUTTONS
+// 5. TIMEFRAME BUTTONS
 // ------------------------------------------------
 document.querySelectorAll('.timeframe-selector button').forEach(btn => {
     btn.addEventListener('click', function() {
-        document.querySelectorAll('.timeframe-selector button').forEach(b => b.classList
-            .remove('active'));
+        document.querySelectorAll('.timeframe-selector button').forEach(b => b.classList.remove('active'));
         this.classList.add('active');
         showToast(`Timeframe changed to ${this.textContent}`);
     });
 });
 
 // ------------------------------------------------
-// 8. CHART TOOLBAR BUTTONS
+// 6. CHART TOOLBAR BUTTONS
 // ------------------------------------------------
 document.querySelectorAll('.chart-toolbar button').forEach(btn => {
     btn.addEventListener('click', function() {
@@ -326,7 +282,7 @@ document.querySelectorAll('.chart-toolbar button').forEach(btn => {
 });
 
 // ------------------------------------------------
-// 9. PLACEHOLDER PAGE BUTTONS
+// 7. PLACEHOLDER PAGE BUTTONS
 // ------------------------------------------------
 document.querySelectorAll('.placeholder-page .btn-primary, .placeholder-page .btn-success').forEach(btn => {
     btn.addEventListener('click', function() {
@@ -337,9 +293,51 @@ document.querySelectorAll('.placeholder-page .btn-primary, .placeholder-page .bt
 });
 
 // ------------------------------------------------
-// 10. CONSOLE WELCOME
+// 8. CONSOLE LOG
 // ------------------------------------------------
 console.log('✅ KJs TRD Trading Terminal Loaded Successfully');
 console.log('📊 Platform Philosophy: Build Once, Extend with Python Modules');
 console.log('🐍 Python Studio ready for module creation');
 console.log('📦 Module Library loaded with sample modules');
+
+// ------------------------------------------------
+// 9. RESIZE HANDLER
+// ------------------------------------------------
+let resizeTimeout;
+window.addEventListener('resize', function() {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+        const chartPage = document.getElementById('page-chart');
+        if (chartPage && chartPage.classList.contains('active')) {
+            const iframe = chartPage.querySelector('iframe');
+            if (iframe) {
+                // Refresh iframe on resize
+            }
+        }
+    }, 200);
+});
+
+// ------------------------------------------------
+// 10. INITIAL SETUP
+// ------------------------------------------------
+// Make sure default page is showing
+setTimeout(() => {
+    const activeNav = document.querySelector('.nav-item.active');
+    if (activeNav) {
+        const pageName = activeNav.dataset.page;
+        const targetPage = document.getElementById('page-' + pageName);
+        if (targetPage) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            targetPage.classList.add('active');
+            console.log('✅ Initial page set to:', pageName);
+        }
+    }
+}, 100);
+
+// Draw chart if on dashboard
+setTimeout(() => {
+    const dashboard = document.getElementById('page-dashboard');
+    if (dashboard && dashboard.classList.contains('active')) {
+        drawChart();
+    }
+}, 200);
