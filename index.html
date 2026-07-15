@@ -626,26 +626,46 @@
         .module-card .module-actions button.stop:hover {
             background: rgba(239, 68, 68, 0.25);
         }
-        .placeholder-page {
-            display: flex !important;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
+        .page-content {
+            display: flex;
+            flex-direction: column;
+            padding: 24px 32px;
             flex: 1;
-        }
-        .placeholder-page .placeholder-content {
-            text-align: center;
-        }
-        .placeholder-page .placeholder-content .icon {
-            font-size: 48px;
-            margin-bottom: 12px;
-        }
-        .placeholder-page .placeholder-content h3 {
             color: var(--text-secondary);
         }
-        .placeholder-page .placeholder-content p {
-            font-size: 13px;
-            max-width: 400px;
+        .page-content h2 {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        .page-content p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+        .page-content .btn {
+            padding: 8px 20px;
+            border-radius: 6px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            width: fit-content;
+            transition: 0.25s ease;
+        }
+        .page-content .btn-primary {
+            background: var(--accent-blue);
+            color: #fff;
+        }
+        .page-content .btn-primary:hover {
+            background: #2563eb;
+        }
+        .page-content .btn-success {
+            background: var(--accent-green);
+            color: #fff;
+        }
+        .page-content .btn-success:hover {
+            background: #16a34a;
         }
         .toast {
             position: fixed;
@@ -772,7 +792,7 @@
             <!-- CONTENT -->
             <div id="content">
 
-                <!-- DASHBOARD -->
+                <!-- ===== DASHBOARD ===== -->
                 <div id="page-dashboard" class="page active">
                     <div class="dashboard-grid">
                         <div class="stat-card"><div class="label">Running Modules</div><div class="value blue">4</div></div>
@@ -801,7 +821,7 @@
                     </div>
                 </div>
 
-                <!-- CHART -->
+                <!-- ===== CHART ===== -->
                 <div id="page-chart" class="page">
                     <div class="chart-toolbar">
                         <div class="toolbar-group">
@@ -837,7 +857,7 @@
                     </div>
                 </div>
 
-                <!-- PYTHON STUDIO -->
+                <!-- ===== PYTHON STUDIO ===== -->
                 <div id="page-python" class="page">
                     <div class="studio-editor">
                         <div class="editor-header">
@@ -906,7 +926,7 @@ class MomentumBreakout(Module):
                     </div>
                 </div>
 
-                <!-- MODULE LIBRARY -->
+                <!-- ===== MODULE LIBRARY ===== -->
                 <div id="page-modules" class="page">
                     <div style="display:flex;justify-content:space-between;align-items:center;flex-shrink:0;">
                         <h2 style="font-size:18px;font-weight:600;">📦 Module Library</h2>
@@ -986,25 +1006,105 @@ class MomentumBreakout(Module):
                     </div>
                 </div>
 
-                <!-- PLACEHOLDER PAGES -->
-                <div id="page-watchlist" class="page placeholder-page"><div class="placeholder-content"><div class="icon">👁️</div><h3>Watchlists</h3><p>Manage your watchlists. Add symbols, create groups, and monitor your favorite stocks.</p><button class="btn-primary" style="margin-top:12px;padding:8px 24px;">+ Create Watchlist</button></div></div>
-                <div id="page-screener" class="page placeholder-page"><div class="placeholder-content"><div class="icon">🔍</div><h3>Screener</h3><p>Build dynamic stock lists using Python screeners. Find momentum, breakouts, and more.</p><button class="btn-primary" style="margin-top:12px;padding:8px 24px;">+ New Screener</button></div></div>
-                <div id="page-backtest" class="page placeholder-page"><div class="placeholder-content"><div class="icon">⏪</div><h3>Backtesting</h3><p>Test your strategies on historical data. View performance metrics and equity curves.</p><button class="btn-primary" style="margin-top:12px;padding:8px 24px;">+ New Backtest</button></div></div>
-                <div id="page-paper" class="page placeholder-page"><div class="placeholder-content"><div class="icon">📄</div><h3>Paper Trading</h3><p>Trade without real money. Test your strategies in a risk-free environment.</p><button class="btn-success" style="margin-top:12px;padding:8px 24px;">▶ Start Paper Trading</button></div></div>
-                <div id="page-automation" class="page placeholder-page"><div class="placeholder-content"><div class="icon">🤖</div><h3>Automation</h3><p>Configure automated trading rules. Set risk limits, position sizing, and execution rules.</p><button class="btn-primary" style="margin-top:12px;padding:8px 24px;">+ New Automation Rule</button></div></div>
-                <div id="page-orders" class="page placeholder-page"><div class="placeholder-content"><div class="icon">🛒</div><h3>Orders</h3><p>View all your orders — pending, executed, and cancelled.</p></div></div>
-                <div id="page-portfolio" class="page placeholder-page"><div class="placeholder-content"><div class="icon">💼</div><h3>Portfolio</h3><p>Track your holdings, P&L, and portfolio performance.</p></div></div>
-                <div id="page-notifications" class="page placeholder-page"><div class="placeholder-content"><div class="icon">🔔</div><h3>Notifications</h3><p>View all notifications from Telegram, WhatsApp, Email, and more.</p></div></div>
-                <div id="page-settings" class="page placeholder-page"><div class="placeholder-content"><div class="icon">⚙️</div><h3>Settings</h3><p>Configure your platform preferences, broker accounts, and API keys.</p></div></div>
-                <div id="page-logs" class="page placeholder-page"><div class="placeholder-content"><div class="icon">📋</div><h3>Logs</h3><p>View system logs, module logs, and error traces.</p></div></div>
-                <div id="page-reports" class="page placeholder-page"><div class="placeholder-content"><div class="icon">📄</div><h3>Reports</h3><p>Generate daily, weekly, and monthly performance reports.</p></div></div>
+                <!-- ===== WATCHLISTS ===== -->
+                <div id="page-watchlist" class="page">
+                    <div class="page-content">
+                        <h2>👁️ Watchlists</h2>
+                        <p>Manage your watchlists. Add symbols, create groups, and monitor your favorite stocks.</p>
+                        <button class="btn btn-primary">+ Create Watchlist</button>
+                    </div>
+                </div>
+
+                <!-- ===== SCREENER ===== -->
+                <div id="page-screener" class="page">
+                    <div class="page-content">
+                        <h2>🔍 Screener</h2>
+                        <p>Build dynamic stock lists using Python screeners. Find momentum, breakouts, and more.</p>
+                        <button class="btn btn-primary">+ New Screener</button>
+                    </div>
+                </div>
+
+                <!-- ===== BACKTESTING ===== -->
+                <div id="page-backtest" class="page">
+                    <div class="page-content">
+                        <h2>⏪ Backtesting</h2>
+                        <p>Test your strategies on historical data. View performance metrics and equity curves.</p>
+                        <button class="btn btn-primary">+ New Backtest</button>
+                    </div>
+                </div>
+
+                <!-- ===== PAPER TRADING ===== -->
+                <div id="page-paper" class="page">
+                    <div class="page-content">
+                        <h2>📄 Paper Trading</h2>
+                        <p>Trade without real money. Test your strategies in a risk-free environment.</p>
+                        <button class="btn btn-success">▶ Start Paper Trading</button>
+                    </div>
+                </div>
+
+                <!-- ===== AUTOMATION ===== -->
+                <div id="page-automation" class="page">
+                    <div class="page-content">
+                        <h2>🤖 Automation</h2>
+                        <p>Configure automated trading rules. Set risk limits, position sizing, and execution rules.</p>
+                        <button class="btn btn-primary">+ New Automation Rule</button>
+                    </div>
+                </div>
+
+                <!-- ===== ORDERS ===== -->
+                <div id="page-orders" class="page">
+                    <div class="page-content">
+                        <h2>🛒 Orders</h2>
+                        <p>View all your orders — pending, executed, and cancelled.</p>
+                    </div>
+                </div>
+
+                <!-- ===== PORTFOLIO ===== -->
+                <div id="page-portfolio" class="page">
+                    <div class="page-content">
+                        <h2>💼 Portfolio</h2>
+                        <p>Track your holdings, P&L, and portfolio performance.</p>
+                    </div>
+                </div>
+
+                <!-- ===== NOTIFICATIONS ===== -->
+                <div id="page-notifications" class="page">
+                    <div class="page-content">
+                        <h2>🔔 Notifications</h2>
+                        <p>View all notifications from Telegram, WhatsApp, Email, and more.</p>
+                    </div>
+                </div>
+
+                <!-- ===== SETTINGS ===== -->
+                <div id="page-settings" class="page">
+                    <div class="page-content">
+                        <h2>⚙️ Settings</h2>
+                        <p>Configure your platform preferences, broker accounts, and API keys.</p>
+                    </div>
+                </div>
+
+                <!-- ===== LOGS ===== -->
+                <div id="page-logs" class="page">
+                    <div class="page-content">
+                        <h2>📋 Logs</h2>
+                        <p>View system logs, module logs, and error traces.</p>
+                    </div>
+                </div>
+
+                <!-- ===== REPORTS ===== -->
+                <div id="page-reports" class="page">
+                    <div class="page-content">
+                        <h2>📄 Reports</h2>
+                        <p>Generate daily, weekly, and monthly performance reports.</p>
+                    </div>
+                </div>
 
             </div>
         </div>
     </div>
 
     <!-- ============================================================ -->
-    <!-- JAVASCRIPT - COMPLETE -->
+    <!-- JAVASCRIPT -->
     <!-- ============================================================ -->
     <script>
         // ============================================================
@@ -1193,7 +1293,9 @@ class MomentumBreakout(Module):
                 }, 200);
             });
 
-            // Toast function
+            // ============================================================
+            // TOAST
+            // ============================================================
             function showToast(message) {
                 const existing = document.querySelector('.toast');
                 if (existing) existing.remove();
@@ -1208,7 +1310,9 @@ class MomentumBreakout(Module):
                 }, 2500);
             }
 
-            // Module buttons
+            // ============================================================
+            // MODULE BUTTONS
+            // ============================================================
             document.querySelectorAll('.module-actions button').forEach(btn => {
                 btn.addEventListener('click', function(e) {
                     e.stopPropagation();
@@ -1245,7 +1349,9 @@ class MomentumBreakout(Module):
                 });
             });
 
-            // Timeframe buttons
+            // ============================================================
+            // TIMEFRAME
+            // ============================================================
             document.querySelectorAll('.timeframe-selector button').forEach(btn => {
                 btn.addEventListener('click', function() {
                     document.querySelectorAll('.timeframe-selector button').forEach(b => b.classList.remove('active'));
@@ -1254,7 +1360,9 @@ class MomentumBreakout(Module):
                 });
             });
 
-            // Chart toolbar buttons
+            // ============================================================
+            // CHART TOOLBAR
+            // ============================================================
             document.querySelectorAll('.chart-toolbar button').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const group = this.closest('.toolbar-group');
@@ -1269,17 +1377,18 @@ class MomentumBreakout(Module):
                 });
             });
 
-            // Placeholder buttons
-            document.querySelectorAll('.placeholder-page .btn-primary, .placeholder-page .btn-success').forEach(btn => {
+            // ============================================================
+            // PAGE BUTTONS
+            // ============================================================
+            document.querySelectorAll('.page-content .btn').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    const parent = this.closest('.placeholder-content');
-                    const title = parent?.querySelector('h3')?.textContent || 'Page';
+                    const parent = this.closest('.page-content');
+                    const title = parent?.querySelector('h2')?.textContent?.trim() || 'Page';
                     showToast(`${title}: ${this.textContent} clicked`);
                 });
             });
 
             console.log('✅ KJs TRD Trading Terminal Loaded Successfully');
-            console.log('📊 Chart page ready - click Chart in sidebar');
         });
     </script>
 
