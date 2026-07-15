@@ -186,27 +186,14 @@
                 </div>
 
                 <!-- ======================================= -->
-                <!-- PAGE: CHART -->
+                <!-- PAGE: CHART (with Interactive Chart) -->
                 <!-- ======================================= -->
-                <div id="page-chart" class="page">
+                <div id="page-chart" class="page" style="padding:0; flex-direction:column;">
 
-                    <div class="chart-toolbar">
+                    <!-- Chart Toolbar -->
+                    <div class="chart-toolbar" style="flex-shrink:0; border-bottom: 1px solid var(--border-color);">
                         <div class="toolbar-group">
-                            <button class="active">📊 Candle</button>
-                            <button>📈 Line</button>
-                            <button>📉 Area</button>
-                        </div>
-                        <div class="toolbar-group">
-                            <button>↩️</button>
-                            <button>↪️</button>
-                            <button>➕</button>
-                            <button>➖</button>
-                            <button>⬜</button>
-                        </div>
-                        <div class="toolbar-group">
-                            <button>📐 Trendline</button>
-                            <button>🔲 Rectangle</button>
-                            <button>💬 Label</button>
+                            <button class="active" onclick="window.location.href='chart.html'">📈 Interactive Chart</button>
                         </div>
                         <div class="toolbar-group" style="border-right:none;">
                             <span class="indicator-badge">📊 VWAP</span>
@@ -215,13 +202,12 @@
                         </div>
                     </div>
 
-                    <div class="chart-container">
-                        <canvas id="chartCanvas"></canvas>
-                        <div class="chart-overlay">
-                            <div>NIFTY 50 · 15m</div>
-                            <div class="price">22,450.75</div>
-                            <div class="change green">▲ +142.30 (+0.64%)</div>
-                        </div>
+                    <!-- Chart Container with iframe -->
+                    <div style="flex:1; background:#0f1620; position:relative; overflow:hidden;">
+                        <iframe
+                            src="chart.html"
+                            style="width:100%; height:100%; border:none; background:#0f1620; display:block;">
+                        </iframe>
                     </div>
                 </div>
 
@@ -240,7 +226,7 @@
                                 <button class="btn-danger">🗑 Delete</button>
                             </div>
                         </div>
-                        <textarea placeholder="# Write your Python strategy here...&#10;# Example:&#10;#&#10;# def on_candle(candle):&#10;#     if candle.close > candle.open * 1.02:&#10;#         return 'BUY'&#10;#     return None">"""
+                        <textarea placeholder="# Write your Python strategy here...">"""
 Momentum Breakout Strategy
 Detects when price breaks above previous high with volume.
 """
@@ -271,11 +257,9 @@ class MomentumBreakout(Module):
         return None, None
 
     def on_tick(self, tick):
-        # Handle real-time tick updates
         pass
 
     def on_stop(self):
-        # Cleanup when strategy stops
         pass
 </textarea>
                     </div>
