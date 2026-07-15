@@ -167,20 +167,29 @@
                     </div>
                 </div>
 
-                <!-- PAGE: CHART - FIXED WITH INTERACTIVE CHART -->
-                <div id="page-chart" class="page" style="padding:0; flex-direction:column;">
+                <!-- PAGE: CHART - WITH INTERACTIVE CHART -->
+<div id="page-chart" class="page" style="padding:0; flex-direction:column;">
 
-                    <!-- Chart Toolbar -->
-                    <div class="chart-toolbar" style="flex-shrink:0; border-bottom: 1px solid var(--border-color);">
-                        <div class="toolbar-group">
-                            <button class="active" onclick="window.open('chart.html','_blank')">📈 Open Full Chart</button>
-                        </div>
-                        <div class="toolbar-group" style="border-right:none;">
-                            <span class="indicator-badge">📊 VWAP</span>
-                            <span class="indicator-badge">📈 EMA 20</span>
-                            <span class="indicator-badge">📉 RSI</span>
-                        </div>
-                    </div>
+    <!-- Chart Toolbar -->
+    <div class="chart-toolbar" style="flex-shrink:0; border-bottom: 1px solid var(--border-color); background: var(--bg-secondary);">
+        <div class="toolbar-group">
+            <button class="active" onclick="window.open('chart.html','_blank')">📈 Open Full Chart</button>
+        </div>
+        <div class="toolbar-group" style="border-right:none;">
+            <span class="indicator-badge">📊 VWAP</span>
+            <span class="indicator-badge">📈 EMA 20</span>
+            <span class="indicator-badge">📉 RSI</span>
+        </div>
+    </div>
+
+    <!-- Chart Container with iframe -->
+    <div style="flex:1; background:#0f1620; position:relative; overflow:hidden; min-height:500px;">
+        <iframe
+            src="chart.html"
+            style="width:100%; height:100%; border:none; background:#0f1620; display:block; position:absolute; top:0; left:0;">
+        </iframe>
+    </div>
+</div>
 
                     <!-- Chart Container with iframe -->
                     <div style="flex:1; background:#0f1620; position:relative; overflow:hidden; min-height:500px;">
