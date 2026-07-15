@@ -4,18 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>KJs TRD Trading Terminal</title>
-
-    <!-- ============================================================ -->
-    <!-- CSS (External File) -->
-    <!-- ============================================================ -->
     <link rel="stylesheet" href="styles.css" />
-
 </head>
 <body>
-
-    <!-- ============================================================ -->
-    <!-- HTML -->
-    <!-- ============================================================ -->
 
     <div id="app">
 
@@ -48,7 +39,6 @@
             <!-- LEFT SIDEBAR -->
             <nav id="sidebar">
                 <div class="nav-section">Navigation</div>
-
                 <div class="nav-item active" data-page="dashboard">
                     <span class="icon">📊</span>
                     <span>Dashboard</span>
@@ -65,10 +55,8 @@
                     <span class="icon">📦</span>
                     <span>Module Library</span>
                 </div>
-
                 <div class="nav-divider"></div>
                 <div class="nav-section">Tools</div>
-
                 <div class="nav-item" data-page="watchlist">
                     <span class="icon">👁️</span>
                     <span>Watchlists</span>
@@ -85,10 +73,8 @@
                     <span class="icon">📄</span>
                     <span>Paper Trading</span>
                 </div>
-
                 <div class="nav-divider"></div>
                 <div class="nav-section">System</div>
-
                 <div class="nav-item" data-page="automation">
                     <span class="icon">🤖</span>
                     <span>Automation</span>
@@ -105,7 +91,6 @@
                     <span class="icon">🔔</span>
                     <span>Notifications</span>
                 </div>
-
                 <div class="nav-divider"></div>
                 <div class="nav-item" data-page="settings">
                     <span class="icon">⚙️</span>
@@ -124,9 +109,7 @@
             <!-- CONTENT AREA -->
             <div id="content">
 
-                <!-- ======================================= -->
                 <!-- PAGE: DASHBOARD -->
-                <!-- ======================================= -->
                 <div id="page-dashboard" class="page active">
                     <div class="dashboard-grid">
                         <div class="stat-card">
@@ -146,7 +129,6 @@
                             <div class="value blue">18</div>
                         </div>
                     </div>
-
                     <div class="dashboard-bottom">
                         <div class="panel-card">
                             <div class="panel-title">📊 Recent Activity</div>
@@ -185,15 +167,13 @@
                     </div>
                 </div>
 
-                <!-- ======================================= -->
-                <!-- PAGE: CHART (with Interactive Chart) -->
-                <!-- ======================================= -->
+                <!-- PAGE: CHART - FIXED WITH INTERACTIVE CHART -->
                 <div id="page-chart" class="page" style="padding:0; flex-direction:column;">
 
                     <!-- Chart Toolbar -->
                     <div class="chart-toolbar" style="flex-shrink:0; border-bottom: 1px solid var(--border-color);">
                         <div class="toolbar-group">
-                            <button class="active" onclick="window.location.href='chart.html'">📈 Interactive Chart</button>
+                            <button class="active" onclick="window.open('chart.html','_blank')">📈 Open Full Chart</button>
                         </div>
                         <div class="toolbar-group" style="border-right:none;">
                             <span class="indicator-badge">📊 VWAP</span>
@@ -203,17 +183,15 @@
                     </div>
 
                     <!-- Chart Container with iframe -->
-                    <div style="flex:1; background:#0f1620; position:relative; overflow:hidden;">
+                    <div style="flex:1; background:#0f1620; position:relative; overflow:hidden; min-height:500px;">
                         <iframe
                             src="chart.html"
-                            style="width:100%; height:100%; border:none; background:#0f1620; display:block;">
+                            style="width:100%; height:100%; border:none; background:#0f1620; display:block; position:absolute; top:0; left:0;">
                         </iframe>
                     </div>
                 </div>
 
-                <!-- ======================================= -->
                 <!-- PAGE: PYTHON STUDIO -->
-                <!-- ======================================= -->
                 <div id="page-python" class="page">
                     <div class="studio-editor">
                         <div class="editor-header">
@@ -226,7 +204,7 @@
                                 <button class="btn-danger">🗑 Delete</button>
                             </div>
                         </div>
-                        <textarea placeholder="# Write your Python strategy here...">"""
+                        <textarea>"""
 Momentum Breakout Strategy
 Detects when price breaks above previous high with volume.
 """
@@ -282,9 +260,7 @@ class MomentumBreakout(Module):
                     </div>
                 </div>
 
-                <!-- ======================================= -->
                 <!-- PAGE: MODULE LIBRARY -->
-                <!-- ======================================= -->
                 <div id="page-modules" class="page">
                     <div style="display:flex;justify-content:space-between;align-items:center;flex-shrink:0;">
                         <h2 style="font-size:18px;font-weight:600;">📦 Module Library</h2>
@@ -307,7 +283,6 @@ class MomentumBreakout(Module):
                                 <button>⏪ Backtest</button>
                             </div>
                         </div>
-
                         <div class="module-card">
                             <div class="module-name">Previous Day Breakout</div>
                             <div class="module-type">Strategy</div>
@@ -324,7 +299,6 @@ class MomentumBreakout(Module):
                                 <button>⏪ Backtest</button>
                             </div>
                         </div>
-
                         <div class="module-card">
                             <div class="module-name">EMA Ribbon</div>
                             <div class="module-type">Indicator</div>
@@ -339,7 +313,6 @@ class MomentumBreakout(Module):
                                 <button>📋 Edit</button>
                             </div>
                         </div>
-
                         <div class="module-card">
                             <div class="module-name">Momentum Scanner</div>
                             <div class="module-type">Screener</div>
@@ -354,7 +327,6 @@ class MomentumBreakout(Module):
                                 <button>⏪ Backtest</button>
                             </div>
                         </div>
-
                         <div class="module-card">
                             <div class="module-name">VWAP Alert</div>
                             <div class="module-type">Alert</div>
@@ -369,7 +341,6 @@ class MomentumBreakout(Module):
                                 <button>📋 Edit</button>
                             </div>
                         </div>
-
                         <div class="module-card">
                             <div class="module-name">Institution Detector</div>
                             <div class="module-type">Strategy</div>
@@ -387,9 +358,7 @@ class MomentumBreakout(Module):
                     </div>
                 </div>
 
-                <!-- ======================================= -->
                 <!-- PLACEHOLDER PAGES -->
-                <!-- ======================================= -->
                 <div id="page-watchlist" class="page placeholder-page">
                     <div class="placeholder-content">
                         <div class="icon">👁️</div>
@@ -487,9 +456,7 @@ class MomentumBreakout(Module):
         </div><!-- /main -->
     </div><!-- /app -->
 
-    <!-- ============================================================ -->
-    <!-- JAVASCRIPT (External File) -->
-    <!-- ============================================================ -->
+    <!-- JAVASCRIPT -->
     <script src="script.js"></script>
 
 </body>
