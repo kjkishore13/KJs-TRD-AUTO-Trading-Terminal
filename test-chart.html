@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.0.0/dist/lightweight-charts.standalone.js"></script>
+</head>
+<body>
+    <div id="chart" style="width:100%;height:500px;"></div>
+    <script>
+        const chart = LightweightCharts.createChart(document.getElementById('chart'), {
+            width: 800,
+            height: 400,
+        });
+        const candleSeries = chart.addCandlestickSeries();
+        const data = [];
+        let price = 100;
+        for (let i = 0; i < 100; i++) {
+            price += (Math.random() - 0.5) * 2;
+            data.push({
+                time: i + 1,
+                open: price,
+                high: price + 0.5,
+                low: price - 0.5,
+                close: price,
+            });
+        }
+        candleSeries.setData(data);
+    </script>
+</body>
+</html>
