@@ -1,214 +1,96 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Chart - KJs TRD</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+    <title>KJs TRD Chart</title>
+    <script src="https://unpkg.com/lightweight-charts@4.0.0/dist/lightweight-charts.standalone.js">
     </script>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
             background: #0b0e14;
-            margin: 0;
-            padding: 20px;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-family: Arial, sans-serif;
         }
         #chart-container {
+            width: 95%;
+            height: 90vh;
             background: #0f1620;
-            border-radius: 8px;
+            border-radius: 12px;
             padding: 20px;
-            max-width: 1000px;
-            margin: 0 auto;
+            border: 1px solid #2a3a4e;
         }
-        h2 {
-            color: #e8edf5;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        canvas {
-            width: 100% !important;
-            height: 500px !important;
-            background: #0f1620;
-        }
-        .back-btn {
-            display: inline-block;
-            background: #3b82f6;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 4px;
-            text-decoration: none;
-            margin-bottom: 20px;
-        }
-        .back-btn:hover {
-            background: #2563eb;
+        #chart {
+            width: 100%;
+            height: 100%;
         }
     </style>
 </head>
 <body>
-
-    <div style="max-width:1000px;margin:0 auto;">
-        <a href="index.html" class="back-btn">← Back to Terminal</a>
-        <div id="chart-container">
-            <h2>📊 NIFTY 50 - Candlestick Chart</h2>
-            <canvas id="chartCanvas"></canvas>
-        </div>
+    <div id="chart-container">
+        <div id="chart"></div>
     </div>
 
     <script>
-        // Generate mock candlestick data
-        function generateData() {
-            const data = [];
-            let price = 22400;
-            const now = new Date();
-            const oneHour = 60 * 60 * 1000;
+        console.log('🚀 Starting chart...');
 
-            for (let i = 0; i < 60; i++) {
-                const change = (Math.random() - 0.48) * 60;
-                const open = price;
-                const close = price + change;
-                const high = Math.max(open, close) + Math.random() * 20;
-                const low = Math.min(open, close) - Math.random() * 20;
+        const chartElement = document.getElementById('chart');
+        console.log('📦 Chart element:', chartElement);
 
-                data.push({
-                    t: new Date(now.getTime() - (59 - i) * oneHour),
-                    o: Math.round(open * 100) / 100,
-                    h: Math.round(high * 100) / 100,
-                    l: Math.round(low * 100) / 100,
-                    c: Math.round(close * 100) / 100,
-                });
-
-                price = close;
-            }
-
-            return data;
-        }
-
-        const data = generateData();
-        const ctx = document.getElementById('chartCanvas').getContext('2d');
-
-        // Prepare data for Chart.js
-        const labels = data.map(d => d.t.toLocaleTimeString());
-        const openPrices = data.map(d => d.o);
-        const closePrices = data.map(d => d.c);
-        const highPrices = data.map(d => d.h);
-        const lowPrices = data.map(d => d.l);
-
-        // Create custom candlestick chart using scatter plot
-        const chart = new Chart(ctx, {
-            type: 'scatter',
-            data: {
-                datasets: [
-                    // High-Low lines (wicks)
-                    {
-                        label: 'Wick',
-                        data: data.map((d, i) => ({
-                            x: i,
-                            y: d.h,
-                            low: d.l,
-                            open: d.o,
-                            close: d.c,
-                            isBull: d.c > d.o
-                        })),
-                        backgroundColor: function(context) {
-                            const raw = context.raw;
-                            return raw.isBull ? '#22c55e' : '#ef4444';
-                        },
-                        borderColor: function(context) {
-                            const raw = context.raw;
-                            return raw.isBull ? '#22c55e' : '#ef4444';
-                        },
-                        borderWidth: 1,
-                        showLine: false,
-                        pointRadius: 0,
-                    }
-                ]
+        const chart = LightweightCharts.createChart(chartElement, {
+            width: chartElement.clientWidth,
+            height: chartElement.clientHeight,
+            layout: {
+                background: { color: '#0f1620' },
+                textColor: '#8a9bb5',
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: {
-                        grid: { color: '#1a2433' },
-                        ticks: { color: '#5a6f8a' },
-                        title: { color: '#5a6f8a', display: true, text: 'Time' }
-                    },
-                    y: {
-                        grid: { color: '#1a2433' },
-                        ticks: { color: '#5a6f8a' },
-                        title: { color: '#5a6f8a', display: true, text: 'Price' }
-                    }
-                },
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                const raw = context.raw;
-                                return `O: ${raw.open} | H: ${raw.y} | L: ${raw.low} | C: ${raw.close}`;
-                            }
-                        }
-                    }
-                }
-            }
+            grid: {
+                vertLines: { color: '#1a2433' },
+                horzLines: { color: '#1a2433' },
+            },
         });
 
-        // Add custom candlestick drawing
-        function drawCandlesticks() {
-            const canvas = document.getElementById('chartCanvas');
-            const ctx2 = canvas.getContext('2d');
-            const rect = canvas.getBoundingClientRect();
-            const w = canvas.width;
-            const h = canvas.height;
+        console.log('✅ Chart created!');
 
-            // Clear previous drawing
-            ctx2.clearRect(0, 0, w, h);
+        const candleSeries = chart.addCandlestickSeries({
+            upColor: '#22c55e',
+            downColor: '#ef4444',
+            borderUpColor: '#22c55e',
+            borderDownColor: '#ef4444',
+            wickUpColor: '#22c55e',
+            wickDownColor: '#ef4444',
+        });
 
-            // Get chart area
-            const chartArea = chart.chartArea;
-            const xScale = chart.scales.x;
-            const yScale = chart.scales.y;
+        console.log('✅ Series added!');
 
-            if (!chartArea) return;
-
-            const xPadding = 0.3;
-            const candleWidth = (xScale.width / data.length) * 0.7;
-
-            data.forEach((d, i) => {
-                const x = xScale.getPixelForValue(i);
-                const yOpen = yScale.getPixelForValue(d.o);
-                const yClose = yScale.getPixelForValue(d.c);
-                const yHigh = yScale.getPixelForValue(d.h);
-                const yLow = yScale.getPixelForValue(d.l);
-
-                const isBull = d.c > d.o;
-                const color = isBull ? '#22c55e' : '#ef4444';
-
-                // Draw wick
-                ctx2.beginPath();
-                ctx2.moveTo(x, yHigh);
-                ctx2.lineTo(x, yLow);
-                ctx2.strokeStyle = color;
-                ctx2.lineWidth = 1;
-                ctx2.stroke();
-
-                // Draw body
-                const bodyTop = Math.min(yOpen, yClose);
-                const bodyHeight = Math.max(Math.abs(yClose - yOpen), 2);
-                ctx2.fillStyle = color;
-                ctx2.fillRect(x - candleWidth / 2, bodyTop, candleWidth, bodyHeight);
+        // Generate mock data
+        const data = [];
+        let price = 100;
+        for (let i = 0; i < 100; i++) {
+            const change = (Math.random() - 0.48) * 3;
+            const open = price;
+            const close = price + change;
+            const high = Math.max(open, close) + Math.random() * 1.5;
+            const low = Math.min(open, close) - Math.random() * 1.5;
+            data.push({
+                time: i + 1,
+                open: Math.round(open * 100) / 100,
+                high: Math.round(high * 100) / 100,
+                low: Math.round(low * 100) / 100,
+                close: Math.round(close * 100) / 100,
             });
+            price = close;
         }
 
-        // Override chart draw to include candlesticks
-        const originalDraw = chart.draw.bind(chart);
-        chart.draw = function() {
-            originalDraw();
-            setTimeout(drawCandlesticks, 100);
-        };
-
-        // Initial draw
-        setTimeout(drawCandlesticks, 500);
-
-        console.log('✅ Chart loaded successfully!');
-        console.log('📊 KJs TRD Trading Terminal');
+        candleSeries.setData(data);
+        console.log('✅ Data set! Chart should be visible now!');
+        console.log('📊 Total candles:', data.length);
     </script>
 </body>
 </html>
