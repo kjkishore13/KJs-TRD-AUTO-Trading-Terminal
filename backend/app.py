@@ -26,8 +26,8 @@ CORS(app)
 # ============================================================
 
 # REPLACE WITH YOUR ACTUAL CREDENTIALS
-DHAN_CLIENT_ID = "YOUR_CLIENT_ID"  # Get from Dhan app
-DHAN_ACCESS_TOKEN = "YOUR_ACCESS_TOKEN"  # Get from Dhan app
+DHAN_CLIENT_ID = "1111971907"  # Get from Dhan app
+DHAN_ACCESS_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJwX2lwIjoiIiwic19pcCI6IiIsImlzcyI6ImRoYW4iLCJwYXJ0bmVySWQiOiIiLCJleHAiOjE3ODQyNTQwNzUsImlhdCI6MTc4NDE2NzY3NSwidG9rZW5Db25zdW1lclR5cGUiOiJTRUxGIiwid2ViaG9va1VybCI6Imh0dHBzOi8va2praXNob3JlMTMuZ2l0aHViLmlvL0tKcy1UUkQtQVVUTy1UcmFkaW5nLVRlcm1pbmFsLyIsImRoYW5DbGllbnRJZCI6IjExMTE5NzE5MDcifQ.qT7nDMfwpEBnnJxkZW-ehNJTErinSz9hNDuGDO2ekOwh90IR3Q8T7AWpVTSAAhh9AiGKn7tnz7n-CQXaYD4quQ"  # Get from Dhan app
 
 # Initialize Dhan client if available
 dhan = None
