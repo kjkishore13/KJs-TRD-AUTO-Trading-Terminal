@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>KJs TRD - Chart</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+    <title>KJs TRD - Candlestick Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.0.0/dist/lightweight-charts.standalone.js">
     </script>
     <style>
         * {
@@ -26,23 +26,11 @@
             width: 95%;
             max-width: 1100px;
             border: 1px solid #2a3a4e;
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+            height: 600px;
         }
-        h2 {
-            color: #e8edf5;
-            text-align: center;
-            margin-bottom: 20px;
-            font-weight: 400;
-            letter-spacing: 1px;
-        }
-        .chart-wrapper {
-            position: relative;
-            height: 500px;
+        #chart {
             width: 100%;
-        }
-        canvas {
-            width: 100% !important;
-            height: 100% !important;
+            height: 100%;
         }
         .back-btn {
             display: inline-block;
@@ -60,25 +48,22 @@
 
     <div id="chart-container">
         <a href="index.html" class="back-btn">← Back to Terminal</a>
-        <h2>📊 NIFTY 50 - Candlestick Chart</h2>
-        <div class="chart-wrapper">
-            <canvas id="chartCanvas"></canvas>
-        </div>
+        <div id="chart"></div>
     </div>
 
     <script>
-        console.log('🚀 Starting Chart.js...');
+        console.log('🚀 Starting Lightweight Charts...');
 
         // =============================================
         // 1. GENERATE CANDLESTICK DATA
         // =============================================
-        function generateData() {
+        function generateCandleData(count = 100) {
             const data = [];
             let price = 22400;
             const now = new Date();
             const oneHour = 60 * 60 * 1000;
 
-            for (let i = 59; i >= 0; i--) {
+            for (let i = count - 1; i >= 0; i--) {
                 const change = (Math.random() - 0.48) * 60;
                 const open = price;
                 const close = price + change;
@@ -86,7 +71,7 @@
                 const low = Math.min(open, close) - Math.random() * 20;
 
                 data.push({
-                    time: new Date(now.getTime() - i * oneHour),
+                    time: new Date(now.getTime() - i * oneHour).getTime() / 1000,
                     open: Math.round(open * 100) / 100,
                     high: Math.round(high * 100) / 100,
                     low: Math.round(low * 100) / 100,
@@ -99,162 +84,140 @@
             return data;
         }
 
-        const candleData = generateData();
-        console.log('📊 Generated', candleData.length, 'candles');
-
         // =============================================
-        // 2. DRAW CANDLESTICKS USING CHART.JS
+        // 2. CREATE THE CHART
         // =============================================
-        const ctx = document.getElementById('chartCanvas').getContext('2d');
+        const chartElement = document.getElementById('chart');
 
-        // Prepare data for chart
-        const labels = candleData.map(d => d.time.toLocaleTimeString());
-
-        // Calculate body ranges
-        const bodyData = candleData.map(d => {
-            const bodyHigh = Math.max(d.open, d.close);
-            const bodyLow = Math.min(d.open, d.close);
-            return {
-                high: d.high,
-                low: d.low,
-                open: d.open,
-                close: d.close,
-                bodyHigh: bodyHigh,
-                bodyLow: bodyLow,
-                isBull: d.close > d.open,
-                // For bar chart we need positive values
-                bodyRange: Math.abs(d.close - d.open),
-                // Wick ranges
-                upperWick: d.high - bodyHigh,
-                lowerWick: bodyLow - d.low,
-            };
+        const chart = LightweightCharts.createChart(chartElement, {
+            width: chartElement.clientWidth,
+            height: chartElement.clientHeight,
+            layout: {
+                background: { color: '#0f1620' },
+                textColor: '#8a9bb5',
+            },
+            grid: {
+                vertLines: { color: '#1a2433' },
+                horzLines: { color: '#1a2433' },
+            },
+            crosshair: {
+                mode: LightweightCharts.CrosshairMode.Normal,
+            },
+            rightPriceScale: {
+                borderColor: '#2a3a4e',
+            },
+            timeScale: {
+                borderColor: '#2a3a4e',
+                timeVisible: true,
+                secondsVisible: false,
+            },
         });
 
-        // Create the chart
-        const chart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [
-                    // Bullish candles (green)
-                    {
-                        label: 'Bullish',
-                        data: bodyData.map(d => d.isBull ? d.bodyRange : 0),
-                        backgroundColor: '#22c55e',
-                        borderColor: '#22c55e',
-                        borderWidth: 1,
-                        barPercentage: 0.6,
-                        categoryPercentage: 0.8,
-                    },
-                    // Bearish candles (red)
-                    {
-                        label: 'Bearish',
-                        data: bodyData.map(d => d.isBull ? 0 : d.bodyRange),
-                        backgroundColor: '#ef4444',
-                        borderColor: '#ef4444',
-                        borderWidth: 1,
-                        barPercentage: 0.6,
-                        categoryPercentage: 0.8,
+        console.log('✅ Chart created!');
+
+        // =============================================
+        // 3. ADD CANDLESTICK SERIES
+        // =============================================
+        const candleSeries = chart.addCandlestickSeries({
+            upColor: '#22c55e',
+            downColor: '#ef4444',
+            borderUpColor: '#22c55e',
+            borderDownColor: '#ef4444',
+            wickUpColor: '#22c55e',
+            wickDownColor: '#ef4444',
+        });
+
+        console.log('✅ Series added!');
+
+        // =============================================
+        // 4. LOAD THE DATA
+        // =============================================
+        const data = generateCandleData(100);
+        candleSeries.setData(data);
+
+        console.log('✅ Data loaded!');
+        console.log('📊 Total candles:', data.length);
+
+        // =============================================
+        // 5. ADD EMA INDICATOR
+        // =============================================
+        function calculateEMA(data, period = 20) {
+            const ema = [];
+            const multiplier = 2 / (period + 1);
+
+            for (let i = 0; i < data.length; i++) {
+                if (i < period - 1) {
+                    ema.push(null);
+                    continue;
+                }
+
+                if (i === period - 1) {
+                    let sum = 0;
+                    for (let j = 0; j < period; j++) {
+                        sum += data[j].close;
                     }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: '#8a9bb5',
-                            font: { size: 12 }
-                        }
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                const index = context.dataIndex;
-                                const d = candleData[index];
-                                return [
-                                    `Open: ₹${d.open.toFixed(2)}`,
-                                    `High: ₹${d.high.toFixed(2)}`,
-                                    `Low: ₹${d.low.toFixed(2)}`,
-                                    `Close: ₹${d.close.toFixed(2)}`
-                                ];
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        grid: { color: '#1a2433' },
-                        ticks: { color: '#5a6f8a', maxTicksLimit: 15 },
-                        stacked: false,
-                    },
-                    y: {
-                        grid: { color: '#1a2433' },
-                        ticks: { color: '#5a6f8a' },
-                        beginAtZero: false,
-                    }
+                    ema.push(sum / period);
+                } else {
+                    ema.push((data[i].close - ema[i - 1]) * multiplier + ema[i - 1]);
                 }
             }
+            return ema;
+        }
+
+        const emaValues = calculateEMA(data, 20);
+        const emaData = data.map((d, i) => ({
+            time: d.time,
+            value: emaValues[i],
+        })).filter(d => d.value !== null);
+
+        const emaSeries = chart.addLineSeries({
+            color: '#3b82f6',
+            lineWidth: 2,
+            priceLineVisible: false,
+            lastValueVisible: false,
+            crosshairMarkerVisible: false,
         });
 
+        emaSeries.setData(emaData);
+        console.log('✅ EMA 20 added!');
+
         // =============================================
-        // 3. DRAW WICKS (High-Low lines)
+        // 6. ADD BUY/SELL MARKERS
         // =============================================
-        function drawWicks() {
-            const canvas = document.getElementById('chartCanvas');
-            const ctx2 = canvas.getContext('2d');
-            const chartArea = chart.chartArea;
-            const yScale = chart.scales.y;
+        const markers = [];
+        for (let i = 20; i < data.length - 10; i += 25 + Math.floor(Math.random() * 15)) {
+            const isBuy = Math.random() > 0.5;
+            markers.push({
+                time: data[i].time,
+                position: isBuy ? 'belowBar' : 'aboveBar',
+                color: isBuy ? '#22c55e' : '#ef4444',
+                shape: isBuy ? 'arrowUp' : 'arrowDown',
+                text: isBuy ? 'BUY' : 'SELL',
+                size: 1,
+            });
+        }
+        candleSeries.setMarkers(markers);
+        console.log('✅ Buy/Sell markers added!');
 
-            if (!chartArea) return;
-
-            // Clear previous wick drawings (we keep the bars)
-            // We'll draw over the bars
-
-            // Draw wicks for each candle
-            candleData.forEach((d, i) => {
-                const x = chart.scales.x.getPixelForValue(i);
-                const yHigh = yScale.getPixelForValue(d.high);
-                const yLow = yScale.getPixelForValue(d.low);
-                const yOpen = yScale.getPixelForValue(d.open);
-                const yClose = yScale.getPixelForValue(d.close);
-
-                const isBull = d.close > d.open;
-                const color = isBull ? '#22c55e' : '#ef4444';
-
-                // Draw wick (line from high to low)
-                ctx2.beginPath();
-                ctx2.moveTo(x, yHigh);
-                ctx2.lineTo(x, yLow);
-                ctx2.strokeStyle = color;
-                ctx2.lineWidth = 1.5;
-                ctx2.stroke();
-
-                // Draw body border
-                const bodyTop = Math.min(yOpen, yClose);
-                const bodyBottom = Math.max(yOpen, yClose);
-                const barWidth = (chart.scales.x.getPixelForValue(1) - chart.scales.x.getPixelForValue(0)) * 0.6;
-
-                ctx2.strokeStyle = color;
-                ctx2.lineWidth = 0.5;
-                ctx2.strokeRect(x - barWidth / 2, bodyTop, barWidth, bodyBottom - bodyTop);
+        // =============================================
+        // 7. RESIZE HANDLER
+        // =============================================
+        function handleResize() {
+            const container = document.getElementById('chart-container');
+            const rect = container.getBoundingClientRect();
+            chart.applyOptions({
+                width: rect.width - 60,
+                height: rect.height - 80,
             });
         }
 
-        // Wait for chart to render then draw wicks
-        setTimeout(() => {
-            drawWicks();
-            console.log('✅ Wicks drawn!');
-        }, 500);
-
-        // Redraw wicks on resize
-        window.addEventListener('resize', function() {
-            setTimeout(drawWicks, 300);
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(handleResize, 200);
         });
 
-        console.log('✅ Chart created successfully!');
-        console.log('📊 KJs TRD Trading Terminal');
+        console.log('🎉 Chart is fully loaded!');
     </script>
 
 </body>
